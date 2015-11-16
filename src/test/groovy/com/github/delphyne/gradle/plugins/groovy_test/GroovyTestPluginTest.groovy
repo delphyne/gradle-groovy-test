@@ -56,9 +56,9 @@ class GroovyTestPluginTest {
 				.when(project)
 				.extensions
 
-		doReturn(new GroovyTestConvention(version: version))
+		doReturn(new GroovyTestExtension(version: version))
 				.when(extensions)
-				.create('groovyTest', GroovyTestConvention)
+				.create('groovyTest', GroovyTestExtension)
 
 		plugin.apply(project)
 
