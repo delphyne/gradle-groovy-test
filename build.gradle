@@ -3,24 +3,19 @@ apply plugin: GroovyPlugin
 apply plugin: MavenPlugin
 
 group = 'com.github.delphyne.gradle.plugins'
-// If -Pversion is provided, honor it.  If not, use the Tag if it exists, or the build number as a snapshot verion.  
-// If neither of those exist, fall back to the gradle default.
-if (version == 'unspecified') {
-	version = ((System.getenv('TRAVIS_TAG') ?: "${System.getenv('TRAVIS_BUILD_NUMBER')}-SNAPSHOT") ?: version)
-}
+version = System.getenv('TRAVIS_TAG') ?: System.getenv('TRAVIS_BUILD_NUMBER') ?
+		"${System.getenv('TRAVIS_BUILD_NUMBER')}-travis" :
+		version
 
 repositories {
 	jcenter()
-	mavenLocal()
 }
 
 dependencies {
 	testCompile 'org.mockito:mockito-all:1.10.19'
 }
 
-test {
-	useTestNG()
-}
+test.useTestNG()
 
 def travisAttrs = [
 		'repo-slug': 'TRAVIS_REPO_SLUG',
@@ -42,10 +37,10 @@ tasks.withType(Jar).each {
 				'gradle-version': gradle.gradleVersion,
 				'groovy-version': GroovySystem.version])
 
-		travisAttrs.each { k, p ->
-			def v = System.getenv(p)
-			if (v != null) { // truthy isn't good enough
-				attributes((k): v)
+		travisAttrs.each { attr, envVar ->
+			def value = System.getenv(envVar)
+			if (value != null) { // truthy isn't good enough
+				attributes((attr): value)
 			}
 		}
 	}
@@ -65,4 +60,4 @@ uploadArchives {
 			}
 		}
 	}
-}	
+}

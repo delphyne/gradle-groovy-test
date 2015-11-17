@@ -2,6 +2,7 @@ package com.github.delphyne.gradle.plugins.groovy_test
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.Task
 import org.gradle.api.internal.project.AbstractProject
 import org.gradle.api.plugins.ExtensionContainer
 import org.gradle.api.plugins.GroovyPlugin
@@ -38,6 +39,11 @@ class GroovyTestPluginTest {
 
 		assert !project.tasks.find { it.name == 'compileGroovy' },
 				"The compileGroovy task must be removed."
+
+		def dependents = project.tasks.findAll { Task t ->
+			t.dependsOn.contains('compileGroovy')
+		}
+		assert dependents == [] as Set, "Nothing should depend on compileGroovy."
 		assert project.tasks.find { it.name == 'compileTestGroovy' },
 				"The compileTestGroovy task must not be removed."
 		assert !project.configurations.getByName('compile').dependencies.find { it.name.startsWith 'groovy' },
