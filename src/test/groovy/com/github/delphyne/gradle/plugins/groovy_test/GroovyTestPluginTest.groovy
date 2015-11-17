@@ -2,6 +2,7 @@ package com.github.delphyne.gradle.plugins.groovy_test
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.internal.project.AbstractProject
 import org.gradle.api.plugins.ExtensionContainer
 import org.gradle.api.plugins.GroovyPlugin
 import org.gradle.testfixtures.ProjectBuilder
@@ -33,6 +34,7 @@ class GroovyTestPluginTest {
 
 	void testDefaults() {
 		plugin.apply(project)
+		((AbstractProject)project).evaluate()
 
 		assert !project.tasks.find { it.name == 'compileGroovy' },
 				"The compileGroovy task must be removed."
@@ -46,24 +48,15 @@ class GroovyTestPluginTest {
 	}
 
 	void testApplyWithConventionVersion() {
-		String version = 'NOT_A_REAL_VERSION'
-		Project project = spy(ProjectBuilder.builder().build())
-
-		ExtensionContainer old = project.extensions
-		ExtensionContainer extensions = spy(old)
-
-		doReturn(extensions)
-				.when(project)
-				.extensions
-
-		doReturn(new GroovyTestExtension(version: version))
-				.when(extensions)
-				.create('groovyTest', GroovyTestExtension)
-
+		String expected = 'NOT_A_REAL_VERSION'
 		plugin.apply(project)
+		project.groovyTest {
+			version = 'NOT_A_REAL_VERSION'
+		}
+		((AbstractProject)project).evaluate()
 
 		assert project.configurations.getByName('testCompile').dependencies.find {
-			it.name.startsWith('groovy') && it.version == version
+			it.name.startsWith('groovy') && it.version == expected
 		}, "The groovy dependency must be applied to the testCompile configuration and should match the convention version."
 	}
 }
