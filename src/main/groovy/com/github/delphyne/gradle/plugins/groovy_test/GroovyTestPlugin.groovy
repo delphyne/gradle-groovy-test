@@ -9,9 +9,9 @@ class GroovyTestPlugin implements Plugin<Project> {
 	@Override
 	void apply(Project project) {
 		/*
-		 * Get a handle to our convention object
+		 * Register our extension object
 		 */
-		GroovyTestConvention convention = project.extensions.create('groovyTest', GroovyTestConvention)
+		project.extensions.create('groovyTest', GroovyTestExtension)
 
 		/*
 		 * Determine if the groovy plugin is already applied
@@ -24,19 +24,26 @@ class GroovyTestPlugin implements Plugin<Project> {
 		}
 
 		/*
-		 * If the user has not provided a default groovy version, warn and use whatever gradle is using
+		 * We can't use our extension until the project has been evaluated
 		 */
-		if (!convention.version) {
-			def gradleGroovyVersion = GroovySystem.version
-			project.logger.warn("\n\nGroovy version for ${this.getClass().simpleName} has not been specified.  Defaulting to ${gradleGroovyVersion}")
-			convention.version = gradleGroovyVersion
-		}
+		project.afterEvaluate {
+			GroovyTestExtension extension = project.extensions.findByType(GroovyTestExtension)
 
-		/*
-		 * Apply the dependency to the test classpath
-		 */
-		project.dependencies {
-			testCompile "org.codehaus.groovy:groovy-all:${convention.version}"
+			/*
+			 * If the user has not provided a default groovy version, warn and use whatever gradle is using
+			 */
+			if (!extension.version) {
+				def gradleGroovyVersion = GroovySystem.version
+				project.logger.warn("\n\nGroovy version for ${this.getClass().simpleName} has not been specified.  Defaulting to ${gradleGroovyVersion}")
+				extension.version = gradleGroovyVersion
+			}
+
+			/*
+			 * Apply the dependency to the test classpath
+			 */
+			project.dependencies {
+				testCompile "org.codehaus.groovy:groovy-all:${extension.version}"
+			}
 		}
 	}
 }
