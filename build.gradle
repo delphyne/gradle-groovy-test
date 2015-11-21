@@ -12,7 +12,7 @@ buildscript {
 	}
 	dependencies {
 		classpath 'com.github.delphyne:jar-attributes-gradle-plugin:1.0.1'
-		classpath 'com.github.delphyne:default-jars-gradle-plugin:1.0.0'
+		classpath 'com.github.delphyne:default-jars-gradle-plugin:1.0.2'
 	}
 }
 
