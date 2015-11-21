@@ -1,11 +1,11 @@
 [![Build Status](https://travis-ci.org/delphyne/gradle-groovy-test.svg?branch=master)](https://travis-ci.org/delphyne/gradle-groovy-test)
 
 # groovy-test
-A plugin to apply when you want to use Groovy in tests, but don't want it in your main sources.
+_A plugin to apply when you want to use Groovy in tests, but don't want it in your main sources._
 
 ## Installation
 
-#### Within a standalone build.gradle
+### Within a standalone build.gradle
 ```groovy
 buildscript {
 	repositories {
@@ -15,13 +15,13 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath 'com.github.delphyne.gradle.groovy-test:groovy-test-plugin:0.0.1'
+		classpath 'com.github.delphyne:groovy-test-gradle-plugin:1.0.0'
 	}
 }
 ```
 
-#### With a buildSrc directory
-##### buildSrc/build.gradle
+### With a buildSrc directory
+#### buildSrc/build.gradle
 ```groovy
 repositories {
 	maven {
@@ -31,16 +31,16 @@ repositories {
 }
 
 dependencies {
-	compile 'com.github.delphyne.gradle.groovy-test:groovy-test-plugin:0.0.1'
+	compile 'com.github.delphyne:groovy-test-gradle-plugin:1.0.0'
 }
 ```
 
-##### build.gradle
+#### build.gradle
 ```groovy
 apply plugin: 'groovy-test'
 ```
 
-##Usage
+## Usage
 Install the plugin and add Groovy tests to src/test/groovy.  No additional steps are necessary.  Your tests will automatically be run by gradle via the test task.
 
 ## Configuration

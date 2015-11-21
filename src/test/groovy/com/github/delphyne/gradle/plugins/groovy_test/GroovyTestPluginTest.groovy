@@ -4,14 +4,10 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.internal.project.AbstractProject
-import org.gradle.api.plugins.ExtensionContainer
 import org.gradle.api.plugins.GroovyPlugin
 import org.gradle.testfixtures.ProjectBuilder
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
-
-import static org.mockito.Mockito.doReturn
-import static org.mockito.Mockito.spy
 
 @Test
 class GroovyTestPluginTest {
